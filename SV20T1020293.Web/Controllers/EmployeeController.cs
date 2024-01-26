@@ -11,10 +11,17 @@ namespace SV20T1020293.Web.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Title = "Bổ sung nhân viên";
+            return View("Edit");
         }
 
         public IActionResult Edit(string id)
+        {
+            ViewBag.Title = "Cập nhật thông tin nhân viên";
+            return View();
+        }
+
+        public IActionResult Delete(string id)
         {
             return View();
         }

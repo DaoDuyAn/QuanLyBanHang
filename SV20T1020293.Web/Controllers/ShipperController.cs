@@ -20,5 +20,10 @@ namespace SV20T1020293.Web.Controllers
             ViewBag.Title = "Cập nhật thông tin người giao hàng";
             return View();
         }
+
+        public IActionResult Delete(string id)
+        {
+            return View();
+        }
     }
 }
