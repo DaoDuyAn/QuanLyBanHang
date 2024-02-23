@@ -1,12 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SV20T1020293.BusinessLayers;
 
 namespace SV20T1020293.Web.Controllers
 {
     public class CustomerController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, string searchValue = "")
         {
-            return View();
+            int pageSize = 20;
+            int rowCount = 0;
+
+            var data = CommonDataService.ListOfCustomers(out rowCount, page, pageSize, searchValue);
+
+            ViewBag.Page = page;
+            ViewBag.RowCount = rowCount;
+            
+            int pageCount = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+            {
+                pageCount++;
+            }
+            ViewBag.PageCount = pageCount;
+
+            return View(data);
         }
 
         public IActionResult Create()
