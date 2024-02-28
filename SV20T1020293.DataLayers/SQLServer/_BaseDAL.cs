@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SV20T1020293.DataLayers.SQLServer
 {
     /// <summary>
-    /// Lớp cha của các lớp cài đặt các phép xử lý dữ liệu trên SQl Server
+    /// Lớp cha của các lớp cài đặt các phép xử lý dữ liệu trên SQL Server
     /// </summary>
     public abstract class _BaseDAL
     {

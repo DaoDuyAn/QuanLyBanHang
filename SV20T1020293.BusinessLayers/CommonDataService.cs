@@ -16,7 +16,7 @@ namespace SV20T1020293.BusinessLayers
     public static class CommonDataService
     {
         private static readonly ICommonDAL<Province> provinceDB;
-        private static readonly ICommonDAL<Customer> custommerDB;
+        private static readonly ICommonDAL<Customer> customerDB;
 
         /// <summary>
         /// Ctor
@@ -25,7 +25,16 @@ namespace SV20T1020293.BusinessLayers
         {
             string connectionString = Configuration.ConnectionString;
             provinceDB = new ProvinceDAL(connectionString);
-            custommerDB = new CustomerDAL(connectionString);
+            customerDB = new CustomerDAL(connectionString);
+        }
+
+        /// <summary>
+        /// Lấy danh sách các tỉnh/thành
+        /// </summary>
+        /// <returns></returns>
+        public static List<Province> ListOfProvinces() { 
+        
+            return provinceDB.List().ToList();
         }
 
         /// <summary>
@@ -38,11 +47,61 @@ namespace SV20T1020293.BusinessLayers
         /// <returns></returns>
         public static List<Customer> ListOfCustomers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
-            rowCount = custommerDB.Count(searchValue);
+            rowCount = customerDB.Count(searchValue);
 
-            return custommerDB.List(page, pageSize, searchValue).ToList();
+            return customerDB.List(page, pageSize, searchValue).ToList();
         }
 
+        /// <summary>
+        /// Lấy thông tin của 1 khách hàng theo mã khách hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Customer? GetCustomer(int id)
+        {
+            return customerDB.Get(id);
+        }
 
+        /// <summary>
+        /// Bổ sung 1 khách hàng mới. Hàm trả về mã của khách hàng mới được bổ sung
+        /// (Hàm trả về -1 nếu email bị trùng, trả về giá trị 0 nếu lỗi)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static int AddCustomer(Customer data)
+        {
+            return customerDB.Add(data);
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin của 1 khách hàng
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static bool UpdateCustomer(Customer data)
+        {
+            return customerDB.Update(data);
+        }
+
+        public static bool DeleteCustomer(int id)
+        {
+            if (customerDB.InUsed(id))
+            {
+                return false;
+            }
+
+            return customerDB.Delete(id);
+        }
+
+        /// <summary>
+        /// Kiểm tra xem 1 khách hàng hiện có dữ liệu liên quan hay không?
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static bool IsUsedCustomer(int id)
+        {
+            return customerDB.InUsed(id);
+
+        }
     }
 }

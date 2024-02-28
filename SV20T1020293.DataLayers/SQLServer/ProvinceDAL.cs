@@ -1,4 +1,5 @@
-﻿using SV20T1020293.DomainModels;
+﻿using Dapper;
+using SV20T1020293.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,17 @@ namespace SV20T1020293.DataLayers.SQLServer
 
         public IList<Province> List(int page = 1, int pageSize = 0, string searchValue = "")
         {
-            throw new NotImplementedException();
+            List<Province> list = new List<Province>();
+
+            using (var connection = OpenConnection())
+            {
+                var sql = "select * from Provinces";
+                list = connection.Query<Province>(sql: sql).ToList();
+
+                connection.Close();
+            }
+
+            return list;
         }
 
         public bool Update(Province data)
