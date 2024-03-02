@@ -80,7 +80,7 @@ namespace SV20T1020293.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"delete from Customers where CustomerId = @CustomerId";
+                var sql = @"delete from Customers where CustomerID = @CustomerId";
 
                 var parameters = new
                 {
@@ -101,7 +101,7 @@ namespace SV20T1020293.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"select * from Customers where CustomerId = @CustomerId";
+                var sql = @"select * from Customers where CustomerID = @CustomerId";
 
                 var parameters = new
                 {
@@ -122,7 +122,7 @@ namespace SV20T1020293.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"if exists(select * from Orders where CustomerId = @CustomerId)
+                var sql = @"if exists(select * from Orders where CustomerID = @CustomerId)
                                 select 1
                             else 
                                 select 0";
@@ -184,7 +184,7 @@ namespace SV20T1020293.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"if not exists(select * from Customers where CustomerId <> @customerId and Email = @email)
+                var sql = @"if not exists(select * from Customers where CustomerID <> @customerId and Email = @email)
                                 begin
                                     update Customers 
                                     set CustomerName = @customerName,
@@ -194,7 +194,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                                         Phone = @phone,
                                         Email = @email,
                                         IsLocked = @isLocked
-                                    where CustomerId = @customerId
+                                    where CustomerID = @customerId
                                 end";
 
                 var parameters = new

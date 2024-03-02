@@ -35,4 +35,36 @@ namespace SV20T1020293.Web.Models
     {
         public List<Customer>? Data { get; set; }
     }
+
+    /// <summary>
+    /// Kết quả tìm kiếm và lấy danh sách loại hàng
+    /// </summary>
+    public class CategorySearchResult : BasePaginationResult
+    {
+        public List<Category>? Data { get; set; }
+    }
+
+    /// <summary>
+    /// Kết quả tìm kiếm và lấy danh sách nhà cung cấp
+    /// </summary>
+    public class SupplierSearchResult : BasePaginationResult
+    {
+        public List<Supplier>? Data { get; set; }
+    }
+
+    /// <summary>
+    /// Kết quả tìm kiếm và lấy danh sách người giao hàng
+    /// </summary>
+    public class ShipperSearchResult : BasePaginationResult
+    {
+        public List<Shipper>? Data { get; set; }
+    }
+
+    /// <summary>
+    /// Kết quả tìm kiếm và lấy danh sách nhân viên
+    /// </summary>
+    public class EmployeeSearchResult : BasePaginationResult
+    {
+        public List<Employee>? Data { get; set; }
+    }
 }
