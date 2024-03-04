@@ -59,7 +59,7 @@ namespace SV20T1020293.DataLayers.SQLServer
             {
                 var sql = @"
                     select count(*) from Employees
-                    where (@searchvalue = N'') or (FullName like @searchvalue)";
+                    where (@searchValue = N'') or (FullName like @searchValue)";
 
                 var para = new
                 {
@@ -159,7 +159,7 @@ namespace SV20T1020293.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"if not exists(select * from Employees where EmployeeID <> @employeeId and Email = @email)
+                var sql = @"if not exists(select * from Employees where EmployeeID <> @EmployeeID and Email = @Email)
                                 begin
                                     update Employees 
                                     set FullName = @FullName,
@@ -169,12 +169,12 @@ namespace SV20T1020293.DataLayers.SQLServer
                                         Phone = @Phone,
                                         Email = @Email,
                                         IsWorking = @IsWorking
-                                    where EmployeeID = @employeeId
+                                    where EmployeeID = @EmployeeID
                                 end";
 
                 var parameters = new
                 {
-                    employeeId = data.EmployeeID,
+                    EmployeeID = data.EmployeeID,
                     FullName = data.FullName ?? "",
                     BirthDate = data.BirthDate,
                     Address = data.Address ?? "",

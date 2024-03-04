@@ -50,19 +50,25 @@
 
                             <div class="box-body">
                                 <div class="row">
+                                    @{
+                                        string urlAva = string.IsNullOrEmpty(item.Photo) ? "/images/employees/an.jpg" : item.Photo;
+                                    }
+
                                     <div class="col-sm-4">
-                                        <img class="profile-user-img img-responsive img-bordered" src="~/images/employees/an.jpg">
+                                        <img class="profile-user-img img-responsive img-bordered" src="@urlAva">
                                     </div>
                                     <div class="col-sm-8">
                                         <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">
-                                                <i class="fa fa-birthday-cake"></i> @item.BirthDate
+                                                <i class="fa fa-birthday-cake"></i> @string.Format("{0:dd/MM/yyyy}", item.BirthDate)
                                             </li>
                                             <li class="list-group-item">
                                                 <i class="fa fa-phone"></i> @item.Phone
                                             </li>
                                             <li class="list-group-item">
-                                                <i class="fa fa-envelope"></i> @item.Email
+                                                <i class="fa fa-envelope"></i> <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    @item.Email
+                                                </span>
                                             </li>
                                         </ul>
                                     </div>

@@ -19,7 +19,7 @@ namespace SV20T1020293.Web.Models
                     return 1;
 
                 int c = RowCount / PageSize;
-                if (RowCount / PageSize > 0)
+                if (RowCount % PageSize > 0)
                     c += 1;
 
                 return c;

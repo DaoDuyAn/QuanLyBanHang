@@ -46,14 +46,16 @@ namespace SV20T1020293.DataLayers.SQLServer
         {
             int count = 0;
 
-            if (!searchValue.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(searchValue))
+            {
                 searchValue = "%" + searchValue + "%";
+            }
 
             using (SqlConnection connection = OpenConnection())
             {
                 var sql = @"
                     select count(*) from Suppliers
-                    where (@searchvalue = N'') or (SupplierName like @searchvalue)";
+                    where (@searchValue = N'') or (SupplierName like @searchValue)";
 
                 var para = new
                 {
@@ -116,7 +118,9 @@ namespace SV20T1020293.DataLayers.SQLServer
             List<Supplier> listSuppliers = new List<Supplier>(); ;
 
             if (!string.IsNullOrEmpty(searchValue))
+            {
                 searchValue = "%" + searchValue + "%";
+            }
 
             using (var connection = OpenConnection())
             {
@@ -125,7 +129,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                     (
 	                    select *, ROW_NUMBER() over (order by SupplierName) as RowNumber
 	                    from Suppliers
-	                    where (@searchvalue = N'') or (SupplierName like @searchvalue)
+	                    where (@searchValue = N'') or (SupplierName like @searchValue)
                     )
 
                     select * from cte

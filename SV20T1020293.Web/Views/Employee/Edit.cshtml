@@ -7,6 +7,9 @@
 <div class="box box-primary">
     <div class="box-body">
         <form class="form-horizontal" method="post" enctype="multipart/form-data" action="~/Employee/Save">
+            <input type="hidden" name="@nameof(Model.EmployeeID)" value="@Model.EmployeeID" />
+            <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+
             <div class="form-group">
                 <label class="control-label col-sm-2">Họ và tên:</label>
                 <div class="col-sm-10">
@@ -17,7 +20,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Ngày sinh:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="BirthDate" value="@Model.BirthDate" />
+                    <input type="text" class="form-control" name="BirthDate" value="@string.Format("{0:dd/MM/yyyy}", Model.BirthDate)" />
                 </div>
             </div>
 
@@ -48,12 +51,12 @@
                         <label>
                             @if (Model.IsWorking)
                             {
-                                <input type="checkbox" name="IsWorking" value="@Model.IsWorking" checked />
+                                <input type="checkbox" name="true" value="@Model.IsWorking" checked />
                                 <label for="IsWorking">Nhân viên đang làm việc</label>
                             }
                             else
                             {
-                                <input type="checkbox" name="IsWorking" value="@Model.IsWorking" />
+                                <input type="checkbox" name="false" value="@Model.IsWorking" />
                                 <label for="IsWorking">Nhân viên đang làm việc</label>
                             }
                         </label>
@@ -69,10 +72,14 @@
                 </div>
             </div>
 
+            @{
+                string urlAva = string.IsNullOrEmpty(Model.Photo) ? "/images/employees/an.jpg" : Model.Photo;
+            }
+
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     <input type="hidden" name="Photo" value="photo.png" />
-                    <img id="Photo" src="~/images/employees/an.jpg" class="img img-bordered" style="width:200px" />
+                    <img id="Photo" src="@urlAva" class="img img-bordered" style="width:200px" />
                 </div>
             </div>
 
