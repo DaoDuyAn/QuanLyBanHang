@@ -50,13 +50,18 @@
 
                             <div class="box-body">
                                 <div class="row">
-                                    @{
-                                        string urlAva = string.IsNullOrEmpty(item.Photo) ? "/images/employees/an.jpg" : item.Photo;
-                                    }
-
                                     <div class="col-sm-4">
-                                        <img class="profile-user-img img-responsive img-bordered" src="@urlAva">
+                                        @if (string.IsNullOrEmpty(item.Photo))
+                                        {
+                                            <img class="profile-user-img img-responsive img-bordered" src="~/images/employees/nophoto.png">
+                                        }
+                                        else
+                                        {
+                                            <img class="profile-user-img img-responsive img-bordered" src="~/images/employees/@item.Photo">
+                                        }
                                     </div>
+                                    
+
                                     <div class="col-sm-8">
                                         <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.SqlServer.Server;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
+using System.Globalization;
 
 namespace SV20T1020293.Web.Controllers
 {
@@ -28,9 +30,12 @@ namespace SV20T1020293.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.Title = "Bổ sung nhân viên";
+
             var model = new Employee()
             {
-                EmployeeID = 0
+                EmployeeID = 0,
+                Photo = "nophoto.png",
+                BirthDate = new DateTime(2001,8,8)
             };
 
             return View("Edit", model);
@@ -39,18 +44,50 @@ namespace SV20T1020293.Web.Controllers
         public IActionResult Edit(int id = 0)
         {
             ViewBag.Title = "Cập nhật thông tin nhân viên";
+
             var model = CommonDataService.GetEmployee(id);
             if (model == null)
             {
                 return RedirectToAction("Index");
             }
 
+            if (string.IsNullOrWhiteSpace(model.Photo))
+            {
+                model.Photo = "nophoto.png";
+            }
+
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Save(Employee model)
+        public IActionResult Save(Employee model, string birthDateInput = "", IFormFile? uploadPhoto = null)
         {
+            // Xử lý ngày sinh
+            DateTime? d = birthDateInput.ToDateTime();
+            if (d.HasValue)
+            {
+                model.BirthDate = d.Value;
+            }
+
+            // Xử lý ảnh upload: Nếu có ảnh được upload thì lưu ảnh lên server, gán tên file ảnh đã lưu cho model.Photo
+            if (uploadPhoto != null)
+            {
+                // Tên file sẽ lưu trên server 
+                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}";
+
+                // Đường dẫn vật lý đến file sẽ lưu trên server (vd: D:\MyWeb\wwwroot\images\employees\photo.png)
+                string filePath = Path.Combine(ApplicationContext.HostEnviroment.WebRootPath, @"images\employees", fileName);
+
+                // Lưu file lên server
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    uploadPhoto.CopyTo(stream);
+                }
+
+                // Gán tên file ảnh cho model.Photo
+                model.Photo = fileName;
+            }
+
             if (model.EmployeeID == 0)
             {
                 int id = CommonDataService.AddEmployee(model);
@@ -62,6 +99,7 @@ namespace SV20T1020293.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
 
         public IActionResult Delete(int id = 0)
         {

@@ -8,7 +8,6 @@
     <div class="box-body">
         <form class="form-horizontal" method="post" enctype="multipart/form-data" action="~/Employee/Save">
             <input type="hidden" name="@nameof(Model.EmployeeID)" value="@Model.EmployeeID" />
-            <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Họ và tên:</label>
@@ -20,7 +19,9 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Ngày sinh:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="BirthDate" value="@string.Format("{0:dd/MM/yyyy}", Model.BirthDate)" />
+                    <input type="hidden" class="form-control" name="BirthDate" value="@Model.BirthDate" />
+                    <input type="text" class="form-control date-picker" name="birthDateInput"
+                           value="@Model.BirthDate.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB"))" />
                 </div>
             </div>
 
@@ -34,7 +35,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Điện thoại:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Phone" value="@Model.Phone"/>
+                    <input type="text" class="form-control" name="Phone" value="@Model.Phone" />
                 </div>
             </div>
 
@@ -49,16 +50,11 @@
                 <div class="col-lg-offset-2 col-sm-10">
                     <div class="checkbox">
                         <label>
-                            @if (Model.IsWorking)
-                            {
-                                <input type="checkbox" name="true" value="@Model.IsWorking" checked />
-                                <label for="IsWorking">Nhân viên đang làm việc</label>
-                            }
-                            else
-                            {
-                                <input type="checkbox" name="false" value="@Model.IsWorking" />
-                                <label for="IsWorking">Nhân viên đang làm việc</label>
-                            }
+                            @Html.CheckBoxFor(m => m.IsWorking)
+                            Nhân viên đang làm việc
+@*
+                            <input type="checkbox" name="IsWorking"  value="true" @(Model.IsWorking ? "checked" : "")/>
+                            Nhân viên đang làm việc*@
                         </label>
                     </div>
                 </div>
@@ -67,19 +63,16 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Ảnh cá nhân:</label>
                 <div class="col-sm-10">
+                    <input type="hidden" name="Photo" value="@Model.Photo" />
                     <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
                            onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
                 </div>
             </div>
 
-            @{
-                string urlAva = string.IsNullOrEmpty(Model.Photo) ? "/images/employees/an.jpg" : Model.Photo;
-            }
 
             <div class="form-group">
-                <div class="col-lg-offset-2 col-sm-10">
-                    <input type="hidden" name="Photo" value="photo.png" />
-                    <img id="Photo" src="@urlAva" class="img img-bordered" style="width:200px" />
+                <div class="col-lg-offset-2 col-sm-10">             
+                    <img id="Photo" src="~/images/employees/@Model.Photo" class="img img-bordered" style="width:200px" />
                 </div>
             </div>
 

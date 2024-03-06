@@ -39,7 +39,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
                     Photo = data.Photo ?? "",
-                    IsWorking = true
+                    IsWorking = data.IsWorking
                 };
 
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
@@ -181,7 +181,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
                     Photo = data.Photo ?? "",
-                    IsWorking = true
+                    IsWorking = data.IsWorking
                 };
 
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
