@@ -349,7 +349,7 @@ namespace SV20T1020293.BusinessLayers
         /// <param name="pageSize">Số dòng trên mỗi trang (0 nếu không phân trang)</param>
         /// <param name="searchValue">Giá trị tìm kiếm (rỗng nếu lấy toàn bộ loại hàng)</param>
         /// <returns></returns>
-        public static List<Category> ListOfCategorys(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+        public static List<Category> ListOfCategories(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = categoryDB.Count(searchValue);
 

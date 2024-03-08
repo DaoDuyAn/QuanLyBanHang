@@ -52,6 +52,25 @@ namespace SV20T1020293.Web.Controllers
         [HttpPost]
         public IActionResult Save(Supplier model)
         {
+            if (string.IsNullOrWhiteSpace(model.SupplierName))
+                ModelState.AddModelError(nameof(model.SupplierName), "Tên nhà cung cấp không được để trống");
+            if (string.IsNullOrWhiteSpace(model.ContactName))
+                ModelState.AddModelError(nameof(model.ContactName), "Tên giao dịch không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Address))
+                ModelState.AddModelError(nameof(model.Address), "Địa chỉ không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError(nameof(model.Phone), "Số điện thoại không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Email))
+                ModelState.AddModelError(nameof(model.Email), "Email không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Provice))
+                ModelState.AddModelError(nameof(model.Provice), "Vui lòng chọn tỉnh/thành");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.SupplierID == 0 ? "Bổ sung nhà cung cấp" : "Cập nhật thông tin nhà cung cấp";
+                return View("Edit", model);
+            }
+
             if (model.SupplierID == 0)
             {
                 int id = CommonDataService.AddSupplier(model);
@@ -59,6 +78,12 @@ namespace SV20T1020293.Web.Controllers
             else
             {
                 bool result = CommonDataService.UpdateSupplier(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được nhà cung cấp. Có thể email bị trùng");
+                    ViewBag.Title = "Cập nhật thông tin nhà cung cấp";
+                    return View("Edit", model);
+                }
             }
 
             return RedirectToAction("Index");

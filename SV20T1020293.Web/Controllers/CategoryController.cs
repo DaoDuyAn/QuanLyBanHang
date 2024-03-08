@@ -11,7 +11,7 @@ namespace SV20T1020293.Web.Controllers
         {
             int rowCount = 0;
 
-            var data = CommonDataService.ListOfCategorys(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListOfCategories(out rowCount, page, PAGE_SIZE, searchValue ?? "");
 
             var model = new Models.CategorySearchResult()
             {
@@ -52,13 +52,36 @@ namespace SV20T1020293.Web.Controllers
         [HttpPost] 
         public IActionResult Save(Category model) 
         {
+            if (string.IsNullOrWhiteSpace(model.CategoryName))
+                ModelState.AddModelError(nameof(model.CategoryName), "Tên loại hàng không được rỗng");
+            if (string.IsNullOrWhiteSpace(model.Description))
+                ModelState.AddModelError(nameof(model.Description), "Mô tả không được rỗng");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.CategoryID == 0 ? "Bổ sung loại hàng" : "Cập nhật thông tin loại hàng";
+                return View("Edit", model);
+            }
+
             if (model.CategoryID == 0)
             {
                 int id = CommonDataService.AddCategory(model);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError("CategoryName", "Tên loại hàng bị trùng");
+                    ViewBag.Title = "Bổ sung loại hàng";
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateCategory(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được loại hàng. Có thể tên loại hàng bị trùng");
+                    ViewBag.Title = "Cập nhật thông tin loại hàng";
+                    return View("Edit", model);
+                }
             }
 
             return RedirectToAction("Index");

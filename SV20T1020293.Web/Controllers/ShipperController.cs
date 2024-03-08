@@ -51,6 +51,18 @@ namespace SV20T1020293.Web.Controllers
         [HttpPost]
         public IActionResult Save(Shipper model)
         {
+
+            if (string.IsNullOrWhiteSpace(model.ShipperName))
+                ModelState.AddModelError(nameof(model.ShipperName), "Tên đơn vị giao hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError(nameof(model.Phone), "Số điện thoại không được để trống");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.ShipperID == 0 ? "Bổ sung người giao hàng" : "Cập nhật thông tin người giao hàng";
+                return View("Edit", model);
+            }
+
             if (model.ShipperID == 0)
             {
                 int id = CommonDataService.AddShipper(model);

@@ -62,6 +62,23 @@ namespace SV20T1020293.Web.Controllers
         [HttpPost]
         public IActionResult Save(Employee model, string birthDateInput = "", IFormFile? uploadPhoto = null)
         {
+            if (string.IsNullOrWhiteSpace(model.FullName))
+                ModelState.AddModelError(nameof(model.FullName), "Tên khách hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError(nameof(model.Phone), "Số điện thoại không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Address))
+                ModelState.AddModelError(nameof(model.Address), "Địa chỉ không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Email))
+                ModelState.AddModelError(nameof(model.Email), "Email chỉ không được để trống");
+            if (string.IsNullOrWhiteSpace(model.BirthDate.ToString()))
+                ModelState.AddModelError(nameof(model.BirthDate), "Ngày sinh không được để trống");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.EmployeeID == 0 ? "Bổ sung nhân viên" : "Cập nhật thông tin nhân viên";
+                return View("Edit", model);
+            }
+
             // Xử lý ngày sinh
             DateTime? d = birthDateInput.ToDateTime();
             if (d.HasValue)
@@ -91,10 +108,22 @@ namespace SV20T1020293.Web.Controllers
             if (model.EmployeeID == 0)
             {
                 int id = CommonDataService.AddEmployee(model);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError("Email", "Email bị trùng");
+                    ViewBag.Title = "Bổ sung nhân viên";
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateEmployee(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được nhân viên. Có thể email bị trùng");
+                    ViewBag.Title = "Cập nhật thông tin nhân viên";
+                    return View("Edit", model);
+                }
             }
 
             return RedirectToAction("Index");

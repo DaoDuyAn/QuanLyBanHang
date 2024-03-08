@@ -67,4 +67,11 @@ namespace SV20T1020293.Web.Models
     {
         public List<Employee>? Data { get; set; }
     }
+
+    public class ProductSearchResult : BasePaginationResult
+    {
+        public List<Product>? Data { get; set; }
+        public int CategoryId { get; set; }
+        public int SupplierId { get; set; }
+    }
 }

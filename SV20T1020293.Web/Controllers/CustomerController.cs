@@ -1,53 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
+using SV20T1020293.Web.Models;
 
 namespace SV20T1020293.Web.Controllers
 {
     public class CustomerController : Controller
     {
         const int PAGE_SIZE = 20;
-        //public IActionResult Index(int page = 1, string searchValue = "")
-        //{
-        //    int pageSize = 20;
-        //    int rowCount = 0;
+        const string CREATE_TITLE = "Bổ sung khách hàng";
+        const string CUSTOMER_SEARCH = "customer_search"; //Tên biến session dùng để lưu lại điều kiện tìm kiếm
 
-        //    var data = CommonDataService.ListOfCustomers(out rowCount, page, pageSize, searchValue);
+        public IActionResult Index()
+        {
+            //Kiểm tra xem trong session có lưu điều kiện tìm kiếm không
+            //Nếu có thì sử dụng lại điều kiện tìm kiếm, ngược lại thì tìm kiếm theo điều kiện mặc định
+            Models.PaginationSearchInput? input = ApplicationContext.GetSessionData<PaginationSearchInput>(CUSTOMER_SEARCH);
 
-        //    ViewBag.Page = page;
-        //    ViewBag.RowCount = rowCount;
+            if (input == null)
+            {
+                input = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = PAGE_SIZE,
+                    SearchValue = ""
+                };
+            }
 
-        //    int pageCount = rowCount / pageSize;
-        //    if (rowCount % pageSize > 0)
-        //    {
-        //        pageCount++;
-        //    }
-        //    ViewBag.PageCount = pageCount;
+            return View(input);
+        }
 
-        //    return View(data);
-        //}
-
-        public IActionResult Index(int page = 1, string searchValue = "")
+        public IActionResult Search(PaginationSearchInput input)
         {
             int rowCount = 0;
+            var data = CommonDataService.ListOfCustomers(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "");
 
-            var data = CommonDataService.ListOfCustomers(out rowCount, page, PAGE_SIZE, searchValue ?? "");
-
-            var model = new Models.CustomerSearchResult()
+            var model = new CustomerSearchResult()
             {
-                Page = page,
-                PageSize = PAGE_SIZE,
-                SearchValue = searchValue ?? "",
+                Page = input.Page,
+                PageSize = input.PageSize,
+                SearchValue = input.SearchValue ?? "",
                 RowCount = rowCount,
                 Data = data
             };
 
-            return View(model); // dữ liệu truyền cho View có kiểu Models.CustomerSearchResult
+            // Lưu lại vào session điều kiện tìm kiếm
+            ApplicationContext.SetSessionData(CUSTOMER_SEARCH, input);
+
+            return View(model);
         }
+
 
         public IActionResult Create()
         {
-            ViewBag.Title = "Bổ sung khách hàng";
+            ViewBag.Title = CREATE_TITLE;
 
             var model = new Customer()
             {
@@ -73,13 +80,46 @@ namespace SV20T1020293.Web.Controllers
         [HttpPost] // Attribute => chỉ nhận dữ liệu gửi lên dưới dạng POST
         public IActionResult Save(Customer model) // ~ Viết tường minh (int customerID, string customerName, ...)
         {
+            //TODO: Kiểm soát dữ liệu trong model xem có hợp lệ hay không?
+            //Yêu cầu: Tên khách hàng, tên giao dịch, email và tỉnh thành không được để trống
+            if (string.IsNullOrWhiteSpace(model.CustomerName))
+                ModelState.AddModelError(nameof(model.CustomerName), "Tên khách hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(model.ContactName))
+                ModelState.AddModelError(nameof(model.ContactName), "Tên giao dịch không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Address))
+                ModelState.AddModelError(nameof(model.Address), "Địa chỉ không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError(nameof(model.Phone), "Số điện thoại không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Email))
+                ModelState.AddModelError(nameof(model.Email), "Email không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Province))
+                ModelState.AddModelError(nameof(model.Province), "Vui lòng chọn tỉnh/thành");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.CustomerID == 0 ? CREATE_TITLE : "Cập nhật thông tin khách hàng";
+                return View("Edit", model);
+            }
+
             if (model.CustomerID == 0)
             {
                 int id = CommonDataService.AddCustomer(model);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError("Email", "Email bị trùng");
+                    ViewBag.Title = CREATE_TITLE;
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateCustomer(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được khách hàng. Có thể email bị trùng");
+                    ViewBag.Title = "Cập nhật thông tin khách hàng";
+                    return View("Edit", model);
+                }
             }
 
             return RedirectToAction("Index");
