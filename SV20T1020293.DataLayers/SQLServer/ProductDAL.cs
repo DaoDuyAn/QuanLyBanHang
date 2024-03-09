@@ -390,12 +390,14 @@ namespace SV20T1020293.DataLayers.SQLServer
                                     update ProductAttributes 
                                     set AttributeName = @AttributeName,
                                         AttributeValue = @AttributeValue,
-                                        DisplayOrder = @DisplayOrder,
-                                    where AttrubuteID = @AttributeId
+                                        DisplayOrder = @DisplayOrder
+                                    where AttributeID = @AttributeId
                                 end";
 
                 var parameters = new
                 {
+                    ProductId = data.ProductID,
+                    AttributeId = data.AttributeID,
                     AttributeName = data.AttributeName ?? "",
                     AttributeValue = data.AttributeValue ?? "",
                     DisplayOrder = data.DisplayOrder,

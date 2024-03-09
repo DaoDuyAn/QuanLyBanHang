@@ -41,21 +41,8 @@
 
             <div class="form-group">
                 <label>Tỉnh/thành:</label>
-                <select class="form-control" name="Provice">
-                    <option>-- Chọn tỉnh/thành --</option>
-                    @foreach (var item in SV20T1020293.BusinessLayers.CommonDataService.ListOfProvinces())
-                    {
-                        if (item.ProvinceName == Model.Provice)
-                        {
-                            <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
-                        }
-                        else
-                        {
-                            <option value="@item.ProvinceName">@item.ProvinceName</option>
-                        }
-                    }
-                </select>
-                @Html.ValidationMessageFor(m => m.Provice,"", new {@style="color:red"})
+                @Html.DropDownListFor(m => m.Provice, SelectListHelper.Provinces(), new { @class="form-control" })
+                @Html.ValidationMessage("Provice", new { @style="color:#f00" })
             </div>
 
             <div class="form-group">

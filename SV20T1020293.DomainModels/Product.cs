@@ -16,7 +16,7 @@ namespace SV20T1020293.DomainModels
         public string Unit { get; set; } = "";
         public decimal Price { get; set; }
         public string Photo { get; set; } = "";
-        public bool IsSelling { get; set; }
+        public bool IsSelling { get; set; } = true;
     }
 
     public class ProductPhoto
@@ -37,4 +37,5 @@ namespace SV20T1020293.DomainModels
         public string AttributeValue { get; set; } = "";
         public int DisplayOrder { get; set; }
     }
+
 }

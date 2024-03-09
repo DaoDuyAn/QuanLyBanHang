@@ -1,26 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
+using SV20T1020293.Web.Models;
 
 namespace SV20T1020293.Web.Controllers
 {
     public class CategoryController : Controller
     {
         const int PAGE_SIZE = 20;
-        public IActionResult Index(int page = 1, string searchValue = "")
+
+        const string CATEGORY_SEARCH = "category_search"; //Tên biến session dùng để lưu lại điều kiện tìm kiếm
+
+        public IActionResult Index()
+        {
+            //Kiểm tra xem trong session có lưu điều kiện tìm kiếm không
+            //Nếu có thì sử dụng lại điều kiện tìm kiếm, ngược lại thì tìm kiếm theo điều kiện mặc định
+            Models.PaginationSearchInput? input = ApplicationContext.GetSessionData<PaginationSearchInput>(CATEGORY_SEARCH);
+
+            if (input == null)
+            {
+                input = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = PAGE_SIZE,
+                    SearchValue = ""
+                };
+            }
+
+            return View(input);
+        }
+
+        public IActionResult Search(PaginationSearchInput input)
         {
             int rowCount = 0;
+            var data = CommonDataService.ListOfCategories(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "");
 
-            var data = CommonDataService.ListOfCategories(out rowCount, page, PAGE_SIZE, searchValue ?? "");
-
-            var model = new Models.CategorySearchResult()
+            var model = new CategorySearchResult()
             {
-                Page = page,
-                PageSize = PAGE_SIZE,
-                SearchValue = searchValue ?? "",
+                Page = input.Page,
+                PageSize = input.PageSize,
+                SearchValue = input.SearchValue ?? "",
                 RowCount = rowCount,
                 Data = data
             };
+
+            // Lưu lại vào session điều kiện tìm kiếm
+            ApplicationContext.SetSessionData(CATEGORY_SEARCH, input);
 
             return View(model);
         }
@@ -53,9 +78,9 @@ namespace SV20T1020293.Web.Controllers
         public IActionResult Save(Category model) 
         {
             if (string.IsNullOrWhiteSpace(model.CategoryName))
-                ModelState.AddModelError(nameof(model.CategoryName), "Tên loại hàng không được rỗng");
+                ModelState.AddModelError(nameof(model.CategoryName), "Tên loại hàng không được để trống");
             if (string.IsNullOrWhiteSpace(model.Description))
-                ModelState.AddModelError(nameof(model.Description), "Mô tả không được rỗng");
+                ModelState.AddModelError(nameof(model.Description), "Mô tả không được để trống");
 
             if (!ModelState.IsValid)
             {

@@ -30,5 +30,53 @@ namespace SV20T1020293.Web
 
             return list;
         }
+
+        public static List<SelectListItem> Categories()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "-- Loại hàng --"
+            });
+
+            int rowCount = 0;
+
+            foreach (var item in CommonDataService.ListOfCategories(out rowCount, 1, 0, ""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.CategoryID.ToString(),
+                    Text = item.CategoryName
+                });
+            }
+
+            return list;
+        }
+
+        public static List<SelectListItem> Suppliers()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "-- Nhà cung cấp --"
+            });
+
+            int rowCount = 0;
+
+            foreach (var item in CommonDataService.ListOfSuppliers(out rowCount, 1, 0, ""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.SupplierID.ToString(),
+                    Text = item.SupplierName
+                });
+            }
+
+            return list;
+        }
     }
 }
