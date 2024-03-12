@@ -201,7 +201,7 @@ namespace SV20T1020293.Web.Controllers
                     data = new ProductPhoto()
                     {
                         PhotoID = 0,
-                        ProductID = id
+                        ProductID = id,
                     };
 
                     return View(data);
@@ -229,14 +229,14 @@ namespace SV20T1020293.Web.Controllers
             }
         }
 
-        public IActionResult AddPhoto(ProductPhoto model, IFormFile? uploadPhoto, string hasPhoto)
+        public IActionResult AddPhoto(ProductPhoto model, IFormFile? uploadPhoto)
         {
-            if (string.IsNullOrWhiteSpace(hasPhoto))
-                ModelState.AddModelError(nameof(model.Photo), "Vui lòng chọn ảnh");      
+            if (uploadPhoto == null)
+                ModelState.AddModelError(nameof(model.Photo), "Vui lòng chọn ảnh");
             if (string.IsNullOrWhiteSpace(model.Description))
                 ModelState.AddModelError(nameof(model.Description), "Mô tả không được để trống");
             if (!int.TryParse(model.DisplayOrder.ToString(), out int parsedDisplayOrder) || parsedDisplayOrder <= 0)
-                ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị thuộc tính phải > 0");
+                ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị ảnh mặt hàng phải > 0");
 
             // Kiểm tra thứ tự hiển thị
             List<ProductPhoto> lstPhotos = ProductDataService.ListPhotos(model.ProductID);
@@ -290,7 +290,7 @@ namespace SV20T1020293.Web.Controllers
                 {
                     ModelState.AddModelError("Error", "Không thêm được ảnh cho mặt hàng");
                     ViewBag.Title = "Bổ sung ảnh cho mặt hàng";
-                    return View("Edit", model);
+                    return View("Photo", model);
                 }
             }
             else
@@ -300,10 +300,9 @@ namespace SV20T1020293.Web.Controllers
                 {
                     ModelState.AddModelError("Error", "Không cập nhật được ảnh cho mặt hàng");
                     ViewBag.Title = "Cập nhật ảnh của mặt hàng";
-                    return View("Edit", model);
+                    return View("Photo", model);
                 }
             }
-
 
             return RedirectToAction("Edit", new { id = model.ProductID });
         }
@@ -403,7 +402,7 @@ namespace SV20T1020293.Web.Controllers
                 {
                     ModelState.AddModelError("Error", "Không cập nhật được thuộc tính. Có thể tên thuộc tính bị trùng");
                     ViewBag.Title = "Cập nhật thuộc tính của mặt hàng";
-                    return View("Edit", model);
+                    return View("Attribute", model);
                 }
             }
 

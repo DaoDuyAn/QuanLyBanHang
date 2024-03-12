@@ -54,7 +54,7 @@ namespace SV20T1020293.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"if exists(select * from ProductAttributes where AttributeName = @AttributeName)
+                var sql = @"if exists(select * from ProductAttributes where ProductID = @ProductID and AttributeName = @AttributeName)
                                 select -1
                             else
                                 begin
