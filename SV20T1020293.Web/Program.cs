@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using SV20T1020293.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,15 @@ builder.Services.AddControllersWithViews()
     {
         option.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
     });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.Cookie.Name = "AuthenticationCookie";
+                    option.LoginPath = "/Account/Login";
+                    option.AccessDeniedPath = "/Account/AccessDenined"; //Người sử dụng không thỏa mãn quyền
+                    option.ExpireTimeSpan = TimeSpan.FromMinutes(120);  //Thời gian timeout của một phiên đăng nhập
+                });
 
 builder.Services.AddSession(option =>
 {
@@ -29,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();

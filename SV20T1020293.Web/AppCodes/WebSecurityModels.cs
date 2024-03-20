@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace SV20T1020293.Web
 {
     /// <summary>
-    /// Thông tin tài khoản người dùng được lưu trong phiên đăng nhập
+    /// Thông tin tài khoản người dùng được lưu trong phiên đăng nhập (cookie)
     /// </summary>
     public class WebUserData
     {
@@ -126,6 +126,8 @@ namespace SV20T1020293.Web
         }
 
         //TODO: Định nghĩa các role được sử dụng trong hệ thống tại đây
+        [Display(Name = "Quản trị hệ thống")]
+        public const string Administrator = "admin";
 
         [Display(Name = "Nhân viên")]
         public const string Employee = "employee";
@@ -141,7 +143,7 @@ namespace SV20T1020293.Web
     public static class WebUserExtensions
     {
         /// <summary>
-        /// 
+        /// Giải mã lại thông tin đã được mã hóa
         /// </summary>
         /// <param name="principal"></param>
         /// <returns></returns>

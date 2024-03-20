@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
@@ -7,6 +8,7 @@ using System.Reflection;
 
 namespace SV20T1020293.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class ProductController : Controller
     {
         const int PAGE_SIZE = 20;

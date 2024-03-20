@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
@@ -7,6 +8,7 @@ using System.Globalization;
 
 namespace SV20T1020293.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.Administrator}")]
     public class EmployeeController : Controller
     {
         const int PAGE_SIZE = 20;
