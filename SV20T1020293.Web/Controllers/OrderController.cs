@@ -10,16 +10,16 @@ namespace SV20T1020293.Web.Controllers
     public class OrderController : Controller
     {
         // Số dòng trên 1 trang khi hiển thị danh sách đơn hàng
-        private const int ORDER_PAGE_SIZE = 20;
+        const int ORDER_PAGE_SIZE = 20;
         // Tên biến session để lưu điều kiện tìm kiếm đơn hàng
-        private const string ORDER_SEARCH = "order_search";
+        const string ORDER_SEARCH = "order_search";
 
         // Số dòng trên 1 trang khi hiển thị danh sách mặt hàng cần tìm khi lập đơn hàng
-        private const int PRODUCT_PAGE_SIZE = 5;
+        const int PRODUCT_PAGE_SIZE = 5;
         // Tên biến session lưu điều kiện tìm kiếm mặt hàng khi lập đơn hàng
-        private const string PRODUCT_SEARCH = "product_search_for_sale";
+        const string PRODUCT_SEARCH = "product_search_for_sale";
         //Tên biến session dùng để lưu giỏ hàng
-        private const string SHOPPING_CART = "shopping_cart";
+        const string SHOPPING_CART = "shopping_cart";
 
         /// <summary>
         /// Giao diện tìm kiếm và hiển thị kết quả tìm kiếm đơn hàng

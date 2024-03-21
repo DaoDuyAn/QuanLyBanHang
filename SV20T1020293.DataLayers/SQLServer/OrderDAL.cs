@@ -169,8 +169,10 @@ namespace SV20T1020293.DataLayers.SQLServer
         public IList<Order> List(int page = 1, int pageSize = 0, int status = 0, DateTime? fromTime = null, DateTime? toTime = null, string searchValue = "")
         {
             List<Order> list = new List<Order>();
+
             if (!string.IsNullOrEmpty(searchValue))
                 searchValue = "%" + searchValue + "%";
+
             using (var connection = OpenConnection())
             {
                 var sql = @"with cte as(
@@ -238,6 +240,21 @@ namespace SV20T1020293.DataLayers.SQLServer
                 connection.Close();
             }
             return list;
+        }
+
+        public IList<OrderStatus> ListOrderStatus()
+        {
+            List<OrderStatus> listOrderStatus = new List<OrderStatus>();
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"select * from OrderStatus";
+                listOrderStatus = connection.Query<OrderStatus>(sql: sql).ToList();
+
+                connection.Close();
+            }
+
+            return listOrderStatus;
         }
 
         public bool SaveDetail(int orderID, int productID, int quantity, decimal salePrice)

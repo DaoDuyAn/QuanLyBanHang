@@ -56,5 +56,10 @@ string searchValue = "");
         /// Xóa 1 mặt hàng ra khỏi đơn hàng
         /// </summary>
         bool DeleteDetail(int orderID, int productID);
+        /// <summary>
+        /// Lấy danh sách trạng thái của 1 đơn hàng
+        /// </summary>
+        /// <returns></returns>
+        IList<OrderStatus> ListOrderStatus();
     }
 }

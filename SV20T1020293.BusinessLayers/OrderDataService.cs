@@ -21,6 +21,11 @@ namespace SV20T1020293.BusinessLayers
             orderDB = new OrderDAL(Configuration.ConnectionString);
         }
 
+        public static List<OrderStatus> ListOrderStatus()
+        {
+            return orderDB.ListOrderStatus().ToList();
+        }
+
         /// <summary>
         /// Tìm kiếm và lấy danh sách đơn hàng dưới dạng phân trang
         /// </summary>
