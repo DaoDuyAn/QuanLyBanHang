@@ -9,8 +9,8 @@
         @if (Model != null)
         {
             <form id="formEditDetail" action="~/Order/UpdateDetail" method="post" class="form-horizontal">
-                @Html.HiddenFor(m => m.OrderID);
-                @Html.HiddenFor(m => m.ProductID);
+                @Html.HiddenFor(m => m.OrderID)
+                @Html.HiddenFor(m => m.ProductID)
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Cập nhật chi tiết đơn hàng</h4>

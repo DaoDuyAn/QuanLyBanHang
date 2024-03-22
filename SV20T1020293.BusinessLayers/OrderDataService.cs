@@ -55,6 +55,11 @@ namespace SV20T1020293.BusinessLayers
             return orderDB.Get(orderID);
         }
 
+        public static bool UpdateOrder(Order data)
+        {
+            return orderDB.Update(data);
+        }
+
         /// <summary>
         /// Khởi tạo 1 đơn hàng mới (tạo đơn hàng mới ở trạng thái Init).
         /// Hàm trả về mã của đơn hàng được tạo mới
@@ -79,7 +84,8 @@ namespace SV20T1020293.BusinessLayers
                 EmployeeID = employeeID,
                 CustomerID = customerID,
                 DeliveryProvince = deliveryProvince,
-                DeliveryAddress = deliveryAddress
+                DeliveryAddress = deliveryAddress,
+                Status = Constants.ORDER_INIT
             };
 
             int orderID = orderDB.Add(data);
@@ -157,6 +163,7 @@ namespace SV20T1020293.BusinessLayers
                 data.AcceptTime = DateTime.Now;
                 return orderDB.Update(data);
             }
+
             return false;
         }
 

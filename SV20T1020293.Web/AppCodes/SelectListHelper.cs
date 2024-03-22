@@ -78,5 +78,29 @@ namespace SV20T1020293.Web
 
             return list;
         }
+
+        public static List<SelectListItem> Shippers()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "-- Chọn người giao hàng --",
+            });
+
+            int rowCount = 0;
+
+            foreach (var item in CommonDataService.ListOfShippers(out rowCount, 1, 0, ""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.ShipperID.ToString(),
+                    Text = item.ShipperName,
+                });
+            }
+
+            return list;
+        }
     }
 }

@@ -19,9 +19,9 @@ namespace SV20T1020293.DomainModels
         public string CustomerEmail { get; set; } = "";
         public string DeliveryProvince { get; set; } = "";
         public string DeliveryAddress { get; set; } = "";
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         public string EmployeeName { get; set; } = "";
-        public int ShipperID { get; set; }
+        public int? ShipperID { get; set; }
         public string ShipperName { get; set; } = "";
         public string ShipperPhone { get; set; } = "";
         public DateTime? ShippedTime { get; set; }

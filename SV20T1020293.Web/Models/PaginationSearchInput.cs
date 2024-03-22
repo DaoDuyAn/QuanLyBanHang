@@ -19,5 +19,8 @@
         public int SupplierID { get; set; } = 0;
         public decimal MinPrice { get; set; }
         public decimal MaxPrice { get; set; }
+
+        public int CustomerID { get; set; } = 0;
+        public string Province { get; set; } = "";
     }
 }

@@ -1,5 +1,5 @@
 ﻿@model SV20T1020293.Web.Models.OrderSearchResult
-@using SV20T1020293.BusinessLayers;
+
 @{
     Layout = null;
 }
@@ -28,13 +28,13 @@
             @foreach (var o in Model.Data)
             {
                 <tr>
-                    <td>@CommonDataService.GetCustomer(o.CustomerID).CustomerName</td>
-                    <td>@o.OrderTime</td>
-                    <td>@CommonDataService.GetEmployee(o.EmployeeID).FullName</td>
-                    <td>@o.AcceptTime</td>
-                    <td>@CommonDataService.GetShipper(o.ShipperID).ShipperName</td>
-                    <td>@o.ShippedTime</td>
-                    <td>@o.FinishedTime</td>
+                    <td>@o.CustomerName</td>
+                    <td>@o.OrderTime.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)</td>
+                    <td>@o.EmployeeName</td>
+                    <td>@o.AcceptTime?.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)</td>
+                    <td>@o.ShipperName</td>
+                    <td>@o.ShippedTime?.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)</td>
+                    <td>@o.FinishedTime?.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)</td>
                     <td>@o.StatusDescription</td>
                     <td>
                         <a href="~/Order/Details/@o.OrderID" class="btn btn-info btn-xs">

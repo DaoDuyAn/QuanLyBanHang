@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SV20T1020293.BusinessLayers;
 using SV20T1020293.DomainModels;
 using SV20T1020293.Web.Models;
+using System.Reflection;
 
 namespace SV20T1020293.Web.Controllers
 {
@@ -75,6 +76,7 @@ namespace SV20T1020293.Web.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet]
         public IActionResult Details(int id = 0)
         {
             var order = OrderDataService.GetOrder(id);
@@ -91,6 +93,57 @@ namespace SV20T1020293.Web.Controllers
             };
 
             return View(model);
+        }
+
+
+        /// <summary>
+        /// Cập nhật thông tin tỉnh/thành giao hàng và địa chỉ giao hàng
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="deliveryAddress"></param>
+        /// <param name="deliveryProvince"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Details(int orderId, string deliveryAddress, string deliveryProvince)
+        {
+            var order = OrderDataService.GetOrder(orderId);
+            if (order != null)
+            {
+                string mess = "";
+                if (string.IsNullOrEmpty(deliveryAddress))
+                {
+                    mess += "Địa chỉ giao hàng không được để trống \n";
+                }
+                if (string.IsNullOrEmpty(deliveryProvince))
+                {
+                    mess += "Vui lòng chọn tỉnh/thành";
+                }
+
+                if (mess != "")
+                {
+                    TempData["Message"] = mess;
+                    return RedirectToAction("Details", new { id = orderId });
+                }
+
+                order.DeliveryAddress = deliveryAddress;
+                order.DeliveryProvince = deliveryProvince;
+
+                bool result = OrderDataService.UpdateOrder(order);
+                if (result)
+                {
+                    TempData["Message"] = "Cập nhật địa chỉ giao hàng thành công";
+                }
+                else
+                {
+                    TempData["Message"] = "Cập nhật địa chỉ giao hàng thất bại";
+                }
+            }
+            else
+            {
+                TempData["Message"] = "Không thể cập nhật địa chỉ giao hàng cho đơn hàng này";
+            }
+
+            return RedirectToAction("Details", new { id = orderId });
         }
 
         // Các chức năng xử lý liên quan đến đơn hàng

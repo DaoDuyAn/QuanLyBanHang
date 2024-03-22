@@ -156,7 +156,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                 var parameters = new
                 {
                     OrderID = orderID,  
-                    ProducID = productID,
+                    ProductID = productID,
                 };
 
                 data = connection.QueryFirstOrDefault<OrderDetail>(sql: sql, param: parameters, commandType: CommandType.Text);
@@ -309,11 +309,11 @@ namespace SV20T1020293.DataLayers.SQLServer
                     CustomerID = data.CustomerID,
                     OrderTime = data.OrderTime,
                     DeliveryProvince = data.DeliveryProvince ?? "",
-                    DeleveryAddress = data.DeliveryAddress ?? "",
+                    DeliveryAddress = data.DeliveryAddress ?? "",
                     EmployeeID = data.EmployeeID,
                     AcceptTime = data.AcceptTime,
                     ShipperID = data.ShipperID,
-                    ShipperTime = data.ShippedTime,
+                    ShippedTime = data.ShippedTime,
                     FinishedTime = data.FinishedTime,
                     Status = data.Status,
                     OrderID = data.OrderID,
@@ -322,6 +322,7 @@ namespace SV20T1020293.DataLayers.SQLServer
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
+
             return result;
         }
     }

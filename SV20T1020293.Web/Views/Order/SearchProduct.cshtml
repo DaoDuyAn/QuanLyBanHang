@@ -21,8 +21,16 @@
         </div>
         <div class="row">
             <div class="col-sm-3">
-                <img class="img img-responsive img-bordered"
-                     src="~/images/products/@item.Photo" alt="NoPhoto">
+                @if (string.IsNullOrEmpty(item.Photo))
+                {
+                    <img class="img img-responsive img-bordered"
+                         src="~/images/products/nophoto.png" alt="NoPhoto">
+                }
+                else
+                {
+                    <img class="img img-responsive img-bordered"
+                         src="~/images/products/@item.Photo" alt="NoPhoto">
+                }
             </div>
             <div class="col-sm-9">
                 <div class="form-group-sm">
@@ -40,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group-sm" style="margin-top:2px;">
+                <div class="form-group-sm" style="margin-top:8px;">
                     <button type="submit" class="btn btn-sm btn-primary">
                         <i class="fa fa-shopping-cart"></i> Thêm vào giỏ
                     </button>
