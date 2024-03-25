@@ -51,6 +51,15 @@ namespace SV20T1020293.BusinessLayers
             return productDB.List(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice).ToList();
         }
 
+        public static List<Product> ListProductsIsSelling(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "", int categoryId = 0,
+           int supplierId = 0, decimal minPrice = 0, decimal maxPrice = 0)
+        {
+            rowCount = productDB.Count(searchValue, categoryId, supplierId, minPrice, maxPrice);
+
+            return productDB.ListIsSelling(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice).ToList();
+        }
+
+
         /// <summary>
         /// Lấy thông tin 1 mặt hàng theo mã mặt hàng
         /// </summary>

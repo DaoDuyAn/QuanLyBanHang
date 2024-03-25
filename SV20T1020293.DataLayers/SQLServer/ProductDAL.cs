@@ -306,6 +306,49 @@ namespace SV20T1020293.DataLayers.SQLServer
             return data;
         }
 
+        public IList<Product> ListIsSelling(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0, int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0)
+        {
+            List<Product> data = new List<Product>();
+
+            if (!string.IsNullOrEmpty(searchValue))
+                searchValue = "%" + searchValue + "%";
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"with cte as(
+                                select  *,
+                                        row_number() over(order by ProductName) as RowNumber
+                                from    Products
+                                where   (@SearchValue = N'' or ProductName like @SearchValue)
+                                    and (@CategoryID = 0 or CategoryID = @CategoryID)
+                                    and (@SupplierID = 0 or SupplierID = @SupplierID)
+                                    and (Price >= @MinPrice)
+                                    and (@MaxPrice <= 0 or Price <= @MaxPrice)
+                                    and IsSelling = 1
+                            )
+                            select * from cte
+                            where   (@PageSize = 0)
+                                or (RowNumber between (@Page - 1)*@PageSize + 1 and @Page * @PageSize)";
+
+                var parameters = new
+                {
+                    Page = page,
+                    PageSize = pageSize,
+                    SearchValue = searchValue,
+                    CategoryID = categoryID,
+                    SupplierID = supplierID,
+                    MinPrice = minPrice,
+                    MaxPrice = maxPrice
+                };
+
+                data = connection.Query<Product>(sql: sql, param: parameters, commandType: CommandType.Text).ToList();
+
+                connection.Close();
+            }
+
+            return data;
+        }
+
         public IList<ProductAttribute> ListAttributes(int productID)
         {
             List<ProductAttribute> listAttributes = new List<ProductAttribute>();

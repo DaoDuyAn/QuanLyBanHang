@@ -360,7 +360,7 @@ namespace SV20T1020293.Web.Controllers
         public IActionResult SearchProduct(ProductSearchInput input)
         {
             int rowCount = 0;
-            var data = ProductDataService.ListProducts(out rowCount, input.Page,
+            var data = ProductDataService.ListProductsIsSelling(out rowCount, input.Page,
                         input.PageSize, input.SearchValue ?? "");
 
             var model = new ProductSearchResult()
