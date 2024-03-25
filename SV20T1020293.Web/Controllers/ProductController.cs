@@ -231,7 +231,7 @@ namespace SV20T1020293.Web.Controllers
             }
         }
 
-        public IActionResult AddPhoto(ProductPhoto model, IFormFile? uploadPhoto)
+        public IActionResult AddPhoto(ProductPhoto model, IFormFile? uploadPhoto = null)
         {
             if (uploadPhoto == null && model.Photo == null)
                 ModelState.AddModelError(nameof(model.Photo), "Vui lòng chọn ảnh");

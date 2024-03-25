@@ -7,7 +7,7 @@
 <div class="box box-primary">
     <div class="box-body">
         <form class="form-horizontal" method="post" enctype="multipart/form-data" action="~/Product/AddPhoto">
-            @Html.HiddenFor(m => m.Photo)
+           
             @Html.HiddenFor(p => p.ProductID)
             @Html.HiddenFor(p => p.PhotoID)
 
@@ -21,6 +21,7 @@
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
+                    <input type="hidden" name="Photo" value="@Model.Photo" />
                     @if (string.IsNullOrEmpty(Model.Photo))
                     {
                         <img id="Photo" class="img img-bordered" style="width:200px" src="~/images/products/nophoto.png">
