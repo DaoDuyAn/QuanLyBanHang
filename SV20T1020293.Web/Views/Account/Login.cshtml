@@ -52,15 +52,14 @@
                     <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
-                <div class="row">
-                    <div class="col-xs-8">
+                <div class="my-3">
+                    <div class="">
                         @Html.ValidationMessage("Error", new { @style="color:#f00" })
                     </div>
                     <!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Đăng nhập</button>
-                    </div>
-                    <!-- /.col -->
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat mt-2">Đăng nhập</button>
                 </div>
             </form>
 

@@ -77,19 +77,32 @@ namespace SV20T1020293.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult ChangePassword(string oldPassword, string newPassword, string comfirmNewPassword)
+        public IActionResult ChangePassword(string oldPassword, string newPassword, string confirmNewPassword)
         {
             bool result = false;
+
+            if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword)
+                        || string.IsNullOrWhiteSpace(confirmNewPassword))
+            {
+                ModelState.AddModelError("Error", "Bạn cần điền đầy đủ thông tin");
+                return View();
+            }
+
             string username = User?.GetUserData().UserName ?? "";
 
             var userAccount = UserAccountService.Authorize(username, oldPassword);
 
             if (userAccount != null)
             {
-                if (newPassword != comfirmNewPassword)
+                if (newPassword != confirmNewPassword)
                 {
+                    ModelState.AddModelError("Error", "Mật khẩu mới và xác nhận mật khẩu không giống nhau");
+                    return View();
+                }
 
-                    ModelState.AddModelError("Error", "Mật khẩu mới và mật khẩu cũ không trùng nhau");
+                if (oldPassword == newPassword)
+                {
+                    ModelState.AddModelError("Error", "Mật khẩu mới và mật khẩu cũ không được trùng nhau");
                     return View();
                 }
             }
@@ -104,7 +117,17 @@ namespace SV20T1020293.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-                
+            else
+            {
+                ModelState.AddModelError("Error", "Đổi mật khẩu không thành công");
+                return View();
+            }
+
+            // return View();
+        }
+
+        public IActionResult AccessDenined()
+        {
             return View();
         }
     }

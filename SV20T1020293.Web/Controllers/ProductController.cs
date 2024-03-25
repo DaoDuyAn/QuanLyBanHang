@@ -233,7 +233,7 @@ namespace SV20T1020293.Web.Controllers
 
         public IActionResult AddPhoto(ProductPhoto model, IFormFile? uploadPhoto)
         {
-            if (uploadPhoto == null)
+            if (uploadPhoto == null && model.Photo == null)
                 ModelState.AddModelError(nameof(model.Photo), "Vui lòng chọn ảnh");
             if (string.IsNullOrWhiteSpace(model.Description))
                 ModelState.AddModelError(nameof(model.Description), "Mô tả không được để trống");
