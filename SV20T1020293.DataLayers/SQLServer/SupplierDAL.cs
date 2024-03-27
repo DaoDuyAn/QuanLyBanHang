@@ -22,8 +22,8 @@ namespace SV20T1020293.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"insert into Suppliers(SupplierName, ContactName, Provice, Address, Phone, Email)
-		                    values (@SupplierName, @ContactName, @Provice, @Address, @Phone, @Email)
+                var sql = @"insert into Suppliers(SupplierName, ContactName, Provice, Address, Phone, Email, BirthDate)
+		                    values (@SupplierName, @ContactName, @Provice, @Address, @Phone, @Email, @BirthDate)
 		                    select @@IDENTITY";
 
                 var parameters = new
@@ -33,7 +33,9 @@ namespace SV20T1020293.DataLayers.SQLServer
                     Provice = data.Provice ?? "",
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
-                    Email = data.Email ?? ""
+                    Email = data.Email ?? "",
+                    BirthDate = data.BirthDate,
+
                 };
 
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
@@ -163,7 +165,8 @@ namespace SV20T1020293.DataLayers.SQLServer
                                 Provice = @provice,
                                 Address = @address,
                                 Phone = @phone,
-                                Email = @email
+                                Email = @email,
+                                BirthDate = @BirthDate
                             where SupplierID = @supplierId";
 
                 var parameters = new
@@ -174,7 +177,8 @@ namespace SV20T1020293.DataLayers.SQLServer
                     Provice = data.Provice ?? "",
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
-                    Email = data.Email ?? ""
+                    Email = data.Email ?? "",
+                    BirthDate = data.BirthDate,
                 };
 
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;

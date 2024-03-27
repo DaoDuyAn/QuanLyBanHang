@@ -22,6 +22,16 @@
             </div>
 
             <div class="form-group">
+                <label>Ngày thành lập:</label>
+                <div>
+                    <input type="hidden" class="form-control" name="BirthDate" value="@Model.BirthDate" />
+                    <input type="text" class="form-control date-picker" name="birthDateInput"
+                           value="@Model.BirthDate.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB"))" />
+                    @Html.ValidationMessageFor(m => m.BirthDate,"", new {@style="color:red"})
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Điện thoại:</label>
                 <input name="Phone" type="text" class="form-control" value="@Model.Phone">
                 @Html.ValidationMessageFor(m => m.Phone,"", new {@style="color:red"})
